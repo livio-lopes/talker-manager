@@ -6,7 +6,7 @@ const PATH_TALKERS = path.resolve(__dirname, '../talker.json')
 const readTalkers = async () => {
     try {
         const data = await fs.readFile(PATH_TALKERS)
-        return data
+        return JSON.parse(data)
     } catch (error) {
         console.error('Could not read the file')
     }
