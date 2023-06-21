@@ -29,9 +29,9 @@ app.get('/talker/:id', async (req,res) =>{
   if(dataTalkerById){
     return res.status(HTTP_OK_STATUS).json(dataTalkerById)
   }
-  return res.status(NOT_FOUND).json(JSON.parse({
+  return res.status(NOT_FOUND).json({
     message: "Pessoa palestrante não encontrada"
-  }))
+  })
 })
 
 
