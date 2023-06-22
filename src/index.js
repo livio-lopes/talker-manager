@@ -1,12 +1,38 @@
 const express = require('express');
 const readTalkers = require('./utils/readTalkers');
-const tokenGenerator = require('./utils/tokenGenerator');
+const { 
+  tokenGenerator, 
+  loginValidation, 
+  EMAIL_VOID,
+  EMAIL_INVALID, 
+  PASSWORD_VOID,
+  PASSWORD_INVALID } = require('./utils/loginUtils');
 
 const app = express();
 app.use(express.json());
 
 const HTTP_OK_STATUS = 200;
 const NOT_FOUND = 404;
+const NOT_FOUND_TALKER = {
+  message: 'Pessoa palestrante não encontrada',
+};
+const BAD_REQUEST = 400;
+const BAD_REQUEST_EMAIL_VOID = {
+  message: 'O campo "email" é obrigatório',
+};
+
+const BAD_REQUEST_EMAIL_INVALID = {
+  message: 'O "email" deve ter o formato "email@email.com"',
+};
+
+const BAD_REQUEST_PASSWORD_VOID = {
+  message: 'O campo "password" é obrigatório',
+};
+
+const BAD_REQUEST_PASSWORD_INVALID = {
+  message: 'O "password" deve ter pelo menos 6 caracteres',
+};
+
 const PORT = process.env.PORT || '3001';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -29,16 +55,23 @@ app.get('/talker/:id', async (req, res) => {
   if (dataTalkerById) {
     return res.status(HTTP_OK_STATUS).json(dataTalkerById);
   }
-  return res.status(NOT_FOUND).json({
-    message: 'Pessoa palestrante não encontrada',
-  });
+  return res.status(NOT_FOUND).json(NOT_FOUND_TALKER);
 });
 
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
   const token = tokenGenerator();
-  if (email && password) {
-    return res.status(200).json({ token });
+  switch (loginValidation(email, password)) {
+    case EMAIL_VOID:
+      return res.status(BAD_REQUEST).json(BAD_REQUEST_EMAIL_VOID);
+    case EMAIL_INVALID:
+      return res.status(BAD_REQUEST).json(BAD_REQUEST_EMAIL_INVALID);
+    case PASSWORD_VOID: 
+      return res.status(BAD_REQUEST).json(BAD_REQUEST_PASSWORD_VOID);
+    case PASSWORD_INVALID:
+      return res.status(BAD_REQUEST).json(BAD_REQUEST_PASSWORD_INVALID);
+    default:
+      return res.status(200).json({ token });
   }
 });
 
