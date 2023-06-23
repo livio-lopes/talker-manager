@@ -12,4 +12,6 @@ const readTalkers = async () => {
     }
 };
 
-module.exports = readTalkers;
+module.exports = {
+    readTalkers, 
+};
