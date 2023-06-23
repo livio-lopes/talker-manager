@@ -10,34 +10,34 @@ const tokenGenerator = () => {
   return listCaracters.join('');
 };
 
-const EMAIL_VOID = 'EMAIL_VOID';
-const EMAIL_INVALID = 'EMAIL_INVALID';
-const PASSWORD_VOID = 'PASSWORD_VOID';
-const PASSWORD_INVALID = 'PASSWORD_INVALID';
+const typeValidation = {
+  EMAIL_VOID: 'EMAIL_VOID',
+  EMAIL_INVALID: 'EMAIL_INVALID',
+  PASSWORD_VOID: 'PASSWORD_VOID',
+  PASSWORD_INVALID: 'PASSWORD_INVALID',
+  LOGIN_VALID: 'LOGIN_VALID',
+};
 
 const loginValidation = (email, password) => {
   const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
   const validEmail = emailRegex.test(email);
   if (!email) {
-    return EMAIL_VOID;
+    return typeValidation.EMAIL_VOID;
   }
   if (!password) {
-    return PASSWORD_VOID;
+    return typeValidation.PASSWORD_VOID;
   }
   if (password.length < 6) {
-    return PASSWORD_INVALID;
+    return typeValidation.PASSWORD_INVALID;
   }
   if (!validEmail) {
-    return EMAIL_INVALID;
+    return typeValidation.EMAIL_INVALID;
   }
-  return 'LOGIN_VALIDO';
+  return typeValidation.LOGIN_VALID;
 };
 
 module.exports = {
   tokenGenerator,
   loginValidation,
-  EMAIL_INVALID,
-  EMAIL_VOID,
-  PASSWORD_INVALID,
-  PASSWORD_VOID,
+  typeValidation,
 };
