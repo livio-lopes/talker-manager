@@ -4,6 +4,7 @@ const statusCode = {
   BAD_REQUEST: 400,
   CREATED: 201,
   UNAUTHORIZED: 401,
+  NO_CONTENT: 204,
 };
 
 const statusMessage = {

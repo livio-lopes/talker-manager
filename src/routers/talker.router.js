@@ -1,5 +1,5 @@
 const express = require('express');
-const { readTalkers, writeTalkers, talkerById, updateTalker } = require('../utils/talkers.utils');
+const { readTalkers, writeTalkers, talkerById, updateTalker, deleteTalker } = require('../utils/talkers.utils');
 const { statusCode, statusMessage } = require('../utils/status.utils');
 const tokenValidator = require('../middlewares/tokenValidator');
 const nameValidator = require('../middlewares/nameValidator');
@@ -56,6 +56,13 @@ talkWatcheAtValidator, async (req, res) => {
   const updatedListTalkers = await updateTalker(id, updateInfoTalker);
   await writeTalkers(JSON.stringify(updatedListTalkers));
   return res.status(statusCode.OK).json(updateInfoTalker);
+});
+
+router.delete('/talker/:id', tokenValidator, async (req, res) => {
+  const { id } = req.params;
+  const deletedTalker = await deleteTalker(id);
+  await writeTalkers(JSON.stringify(deletedTalker));
+  return res.status(statusCode.NO_CONTENT).end();
 });
 
 module.exports = router;

@@ -30,9 +30,15 @@ const updateTalker = async (id, update) => {
   return listTalkers.map((talker) => (talker.id === Number(id) ? { id, ...update } : talker));
 };
 
+const deleteTalker = async (id) => {
+  const listTalkers = await readTalkers();
+  return listTalkers.filter((talker) => talker.id !== Number(id));
+};
+
 module.exports = {
   readTalkers,
   writeTalkers,
   talkerById,
   updateTalker,
+  deleteTalker,
 };
