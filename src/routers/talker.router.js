@@ -1,5 +1,6 @@
 const express = require('express');
-const { readTalkers, writeTalkers, talkerById, updateTalker, deleteTalker } = require('../utils/talkers.utils');
+const { readTalkers, 
+  writeTalkers, talkerById, updateTalker, deleteTalker } = require('../utils/talkers.utils');
 const { statusCode, statusMessage } = require('../utils/status.utils');
 const tokenValidator = require('../middlewares/tokenValidator');
 const nameValidator = require('../middlewares/nameValidator');
