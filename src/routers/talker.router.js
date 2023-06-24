@@ -1,5 +1,5 @@
 const express = require('express');
-const { readTalkers, writeTalkers } = require('../utils/talkers.utils');
+const { readTalkers, writeTalkers, talkerById, updateTalker } = require('../utils/talkers.utils');
 const { statusCode, statusMessage } = require('../utils/status.utils');
 const tokenValidator = require('../middlewares/tokenValidator');
 const nameValidator = require('../middlewares/nameValidator');
@@ -20,8 +20,7 @@ router.get('/talker', async (req, res) => {
   
 router.get('/talker/:id', async (req, res) => {
     const { id } = req.params;
-    const dataTalkers = await readTalkers();
-    const dataTalkerById = dataTalkers.find((talker) => talker.id === Number(id));
+    const dataTalkerById = await talkerById(id);
     if (dataTalkerById) {
       return res.status(statusCode.OK).json(dataTalkerById);
     }
@@ -39,6 +38,24 @@ router.post('/talker', tokenValidator,
   const addTalker = JSON.stringify([...listTalkers, newTalker]);
   await writeTalkers(addTalker);
   return res.status(statusCode.CREATED).json(newTalker);
+});
+
+router.put('/talker/:id', tokenValidator,
+nameValidator,
+ageValidator,
+talkValidator,
+talkRateValidator,
+talkWatcheAtValidator, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const foundTalker = await talkerById(id);
+  if (!foundTalker) {
+    return res.status(statusCode.NOT_FOUND).json(statusMessage.NOT_FOUND_TALKER);
+  }
+  const updateInfoTalker = { id: Number(id), name, age, talk };
+  const updatedListTalkers = await updateTalker(id, updateInfoTalker);
+  await writeTalkers(JSON.stringify(updatedListTalkers));
+  return res.status(statusCode.OK).json(updateInfoTalker);
 });
 
 module.exports = router;
