@@ -10,28 +10,6 @@ const tokenGenerator = () => {
   return listCaracters.join('');
 };
 
-// const EMAIL_VOID = 'EMAIL_VOID';
-// const EMAIL_INVALID = 'EMAIL_INVALID';
-// const PASSWORD_VOID = 'PASSWORD_VOID';
-// const PASSWORD_INVALID = 'PASSWORD_INVALID';
-
-// const loginValidation = (email, password) => {
-  
-//   if (!email) {
-//     return EMAIL_VOID;
-//   }
-//   if (!password) {
-//     return PASSWORD_VOID;
-//   }
-//   if (password.length < 6) {
-//     return PASSWORD_INVALID;
-//   }
-//   if (!validEmail) {
-//     return EMAIL_INVALID;
-//   }
-//   return 'LOGIN_VALIDO';
-// };
-
 module.exports = {
   tokenGenerator,
 };

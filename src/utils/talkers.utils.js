@@ -12,6 +12,15 @@ const readTalkers = async () => {
     }
 };
 
+const writeTalkers = async (talkers) => {
+    try {
+        await fs.writeFile(PATH_TALKERS, talkers);
+    } catch (erro) {
+        console.error('Could not write the file');
+    }
+};
+
 module.exports = {
-    readTalkers, 
+    readTalkers,
+    writeTalkers, 
 };
