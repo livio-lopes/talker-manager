@@ -25,6 +25,11 @@ const talkerById = async (id) => {
   return listTalkers.find((talker) => talker.id === Number(id));
 };
 
+const talkerByName = async (name) => {
+  const listTalkers = await readTalkers();
+  return listTalkers.filter((talker) => talker.name.includes(name));
+};
+
 const updateTalker = async (id, update) => {
   const listTalkers = await readTalkers();
   return listTalkers.map((talker) => (talker.id === Number(id) ? { id, ...update } : talker));
@@ -41,4 +46,5 @@ module.exports = {
   talkerById,
   updateTalker,
   deleteTalker,
+  talkerByName,
 };

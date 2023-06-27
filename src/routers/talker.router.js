@@ -1,6 +1,7 @@
 const express = require('express');
 const { readTalkers, 
-  writeTalkers, talkerById, updateTalker, deleteTalker } = require('../utils/talkers.utils');
+  writeTalkers, talkerById, 
+  updateTalker, deleteTalker, talkerByName } = require('../utils/talkers.utils');
 const { statusCode, statusMessage } = require('../utils/status.utils');
 const tokenValidator = require('../middlewares/tokenValidator');
 const nameValidator = require('../middlewares/nameValidator');
@@ -18,7 +19,17 @@ router.get('/talker', async (req, res) => {
     }
     return res.status(statusCode.OK).json(dataTalkers);
   });
-  
+
+  router.get('/talker/search', tokenValidator, async (req, res) => {
+    const { q } = req.query;
+    if (!q) {
+      const listTalkers = await readTalkers();
+      return res.status(statusCode.OK).json(listTalkers);
+    }
+    const listTalkers = await talkerByName(q);
+    return res.status(statusCode.OK).json(listTalkers);
+  });
+
 router.get('/talker/:id', async (req, res) => {
     const { id } = req.params;
     const dataTalkerById = await talkerById(id);
