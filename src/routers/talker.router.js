@@ -1,7 +1,7 @@
 const express = require('express');
 const { readTalkers, 
   writeTalkers, talkerById, 
-  updateTalker, deleteTalker, talkerByRateName } = require('../utils/talkers.utils');
+  updateTalker, deleteTalker, talkerByRateName, updateRateById, validateRate } = require('../utils/talkers.utils');
 const { statusCode, statusMessage } = require('../utils/status.utils');
 const tokenValidator = require('../middlewares/tokenValidator');
 const nameValidator = require('../middlewares/nameValidator');
@@ -54,6 +54,20 @@ router.post('/talker', tokenValidator,
   const addTalker = JSON.stringify([...listTalkers, newTalker]);
   await writeTalkers(addTalker);
   return res.status(statusCode.CREATED).json(newTalker);
+});
+
+router.patch('/talker/rate/:id', tokenValidator, async (req, res) => {
+  const { id } = req.params;
+  const { rate } = req.body;
+  if (rate === undefined) {
+    return res.status(statusCode.BAD_REQUEST).json(statusMessage.BAD_REQUEST_TALK_RATE_NOT_FOUND);
+  }
+  if (validateRate(rate)) {
+    return res.status(statusCode.BAD_REQUEST).json(statusMessage.BAD_REQUEST_TALK_RATE_INVALID);
+  }
+  const updatedRate = await updateRateById(rate, id);
+  await writeTalkers(JSON.stringify(updatedRate));
+  return res.status(statusCode.NO_CONTENT).end();
 });
 
 router.put('/talker/:id', tokenValidator,

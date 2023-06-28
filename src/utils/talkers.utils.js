@@ -69,6 +69,22 @@ const deleteTalker = async (id) => {
   return listTalkers.filter((talker) => talker.id !== Number(id));
 };
 
+const updateRateById = async (rate, id) => {
+  const listTalkers = await readTalkers();
+  return listTalkers.map((talker) => {
+    if (talker.id === Number(id)) {
+      return {
+        ...talker,
+        talk: {
+          rate,
+          watchedAt: talker.talk.watchedAt,
+        },
+      };
+    }
+    return talker;
+  });
+};
+
 const validateRate = (rate) => {
   const nRate = Number(rate);
   return nRate < 1 || nRate > 5 || !Number.isInteger(nRate);
@@ -104,4 +120,5 @@ module.exports = {
   talkerByDateName,
   searchComplete,
   talkerSearchComplete,
+  updateRateById,
 };
