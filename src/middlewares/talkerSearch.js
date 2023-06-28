@@ -1,5 +1,5 @@
 const { statusCode, statusMessage } = require('../utils/status.utils');
-const { readTalkers, 
+const {  
    talkerByRate, hasOnlyRate, hasRateValid } = require('../utils/talkers.utils');
 
 const talkerSearchValidator = async (req, res, next) => {
@@ -9,10 +9,6 @@ const talkerSearchValidator = async (req, res, next) => {
   }
   if (hasOnlyRate(q, rate)) {
     const listTalkers = await talkerByRate(rate);
-    return res.status(statusCode.OK).json(listTalkers);
-  }
-  if (!q) {
-    const listTalkers = await readTalkers();
     return res.status(statusCode.OK).json(listTalkers);
   }
   return next();

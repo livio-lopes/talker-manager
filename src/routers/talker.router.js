@@ -10,6 +10,7 @@ const talkValidator = require('../middlewares/talkValidator');
 const talkWatcheAtValidator = require('../middlewares/talkWatchedatValidator');
 const talkRateValidator = require('../middlewares/talkRateValidator');
 const talkerSearchValidator = require('../middlewares/talkerSearch');
+const talkerSearchNameNotFound = require('../middlewares/talkerSearchNameNotFound');
 
 const router = express.Router();
 
@@ -21,7 +22,8 @@ router.get('/talker', async (req, res) => {
     return res.status(statusCode.OK).json(dataTalkers);
   });
 
-  router.get('/talker/search', tokenValidator, talkerSearchValidator, async (req, res) => {
+  router.get('/talker/search', tokenValidator,
+   talkerSearchValidator, talkerSearchNameNotFound, async (req, res) => {
     const { q, rate } = req.query;
     const listTalkers = await talkerByRateName(rate, q);
     return res.status(statusCode.OK).json(listTalkers);
