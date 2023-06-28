@@ -30,6 +30,19 @@ const talkerByName = async (name) => {
   return listTalkers.filter((talker) => talker.name.includes(name));
 };
 
+const talkerByRate = async (rate) => {
+  const listTalkers = await readTalkers();
+  return listTalkers.filter((talker) => Number(talker.talk.rate) === Number(rate));
+};
+
+const talkerByRateName = async (rate, name) => {
+  if (name) {
+    const listTalkers = await talkerByName(name);
+    return rate ? listTalkers.filter((talker) => talker.talk.rate === Number(rate)) : listTalkers;
+  }
+  const listTalkers = await talkerByRate(rate);
+  return listTalkers;
+};
 const updateTalker = async (id, update) => {
   const listTalkers = await readTalkers();
   return listTalkers.map((talker) => (talker.id === Number(id) ? { id, ...update } : talker));
@@ -40,6 +53,14 @@ const deleteTalker = async (id) => {
   return listTalkers.filter((talker) => talker.id !== Number(id));
 };
 
+const validateRate = (rate) => {
+  const nRate = Number(rate);
+  return nRate < 1 || nRate > 5 || !Number.isInteger(nRate);
+};
+
+const hasOnlyRate = (name, rate) => !name && rate;
+const hasRateValid = (rate) => rate && validateRate(rate);
+
 module.exports = {
   readTalkers,
   writeTalkers,
@@ -47,4 +68,9 @@ module.exports = {
   updateTalker,
   deleteTalker,
   talkerByName,
+  talkerByRate,
+  validateRate,
+  talkerByRateName,
+  hasOnlyRate,
+  hasRateValid,
 };

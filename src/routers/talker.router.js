@@ -1,7 +1,7 @@
 const express = require('express');
 const { readTalkers, 
   writeTalkers, talkerById, 
-  updateTalker, deleteTalker, talkerByName } = require('../utils/talkers.utils');
+  updateTalker, deleteTalker, talkerByRateName } = require('../utils/talkers.utils');
 const { statusCode, statusMessage } = require('../utils/status.utils');
 const tokenValidator = require('../middlewares/tokenValidator');
 const nameValidator = require('../middlewares/nameValidator');
@@ -9,7 +9,7 @@ const ageValidator = require('../middlewares/ageValidator');
 const talkValidator = require('../middlewares/talkValidator');
 const talkWatcheAtValidator = require('../middlewares/talkWatchedatValidator');
 const talkRateValidator = require('../middlewares/talkRateValidator');
-const searchByNameNotFound = require('../middlewares/searchByNameNotFound');
+const talkerSearchValidator = require('../middlewares/talkerSearch');
 
 const router = express.Router();
 
@@ -21,9 +21,9 @@ router.get('/talker', async (req, res) => {
     return res.status(statusCode.OK).json(dataTalkers);
   });
 
-  router.get('/talker/search', tokenValidator, searchByNameNotFound, async (req, res) => {
-    const { q } = req.query;
-    const listTalkers = await talkerByName(q);
+  router.get('/talker/search', tokenValidator, talkerSearchValidator, async (req, res) => {
+    const { q, rate } = req.query;
+    const listTalkers = await talkerByRateName(rate, q);
     return res.status(statusCode.OK).json(listTalkers);
   });
 
