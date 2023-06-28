@@ -56,6 +56,9 @@ const statusMessage = {
   BAD_REQUEST_TALK_RATE_INVALID: {
     message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
   },
+  BAD_REQUEST_TALKER_SEARCH_DATE_INVALID: {
+    message: 'O parâmetro "date" deve ter o formato "dd/mm/aaaa"',
+  },
 };
 
 module.exports = {

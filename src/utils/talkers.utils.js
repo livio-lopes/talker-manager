@@ -35,6 +35,10 @@ const talkerByRate = async (rate) => {
   return listTalkers.filter((talker) => Number(talker.talk.rate) === Number(rate));
 };
 
+const talkerByDate = async (date) => {
+  const listTalkers = await readTalkers();
+  return listTalkers.filter((talker) => talker.talk.watchedAt === date);
+};
 const talkerByRateName = async (rate, name) => {
   if (name) {
     const listTalkers = await talkerByName(name);
@@ -42,6 +46,18 @@ const talkerByRateName = async (rate, name) => {
   }
   const listTalkers = await talkerByRate(rate);
   return listTalkers;
+};
+
+const talkerByDateName = async (date, name) => {
+  const listTalkers = await talkerByName(name);
+  return listTalkers.filter((talker) => talker.talk.watchedAt === date);
+};
+
+const talkerSearchComplete = async (name, rate, date) => {
+  const listByName = await talkerByName(name);
+  const listByRate = listByName.filter((talker) => talker.talk.rate === Number(rate));
+  const listByDate = listByRate.filter((talker) => talker.talk.watchedAt === date);
+  return listByDate;
 };
 const updateTalker = async (id, update) => {
   const listTalkers = await readTalkers();
@@ -58,7 +74,15 @@ const validateRate = (rate) => {
   return nRate < 1 || nRate > 5 || !Number.isInteger(nRate);
 };
 
+const validadeDate = (date) => {
+  const dateRegex = /(0[1-9]|1\d|2\d|3[0-1])(\/|-|\.|)(0[1-9]|1[0-2])\2\d{4}/;
+  return dateRegex.test(date);
+};
+
 const hasOnlyRate = (name, rate) => !name && rate;
+const hasOnlyDate = (name, rate, date) => !name && !rate && date;
+const hasDateName = (name, rate, date) => !rate && name && date;
+const searchComplete = (name, rate, date) => name && rate && date;
 const hasRateValid = (rate) => rate && validateRate(rate);
 
 module.exports = {
@@ -73,4 +97,11 @@ module.exports = {
   talkerByRateName,
   hasOnlyRate,
   hasRateValid,
+  hasOnlyDate,
+  talkerByDate,
+  validadeDate,
+  hasDateName,
+  talkerByDateName,
+  searchComplete,
+  talkerSearchComplete,
 };
