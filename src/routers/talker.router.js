@@ -14,6 +14,7 @@ const talkerSearchValidator = require('../middlewares/talkerSearch');
 const talkerSearchNameNotFound = require('../middlewares/talkerSearchNameNotFound');
 const talkerSearchDate = require('../middlewares/talkerSearchDate');
 const talkerSearchDateInvalid = require('../middlewares/validateDate');
+const connection = require('../db/connection');
 
 const router = express.Router();
 
@@ -23,6 +24,20 @@ router.get('/talker', async (req, res) => {
       return res.status(statusCode.OK).json(JSON.parse([]));
     }
     return res.status(statusCode.OK).json(dataTalkers);
+  });
+
+  router.get('/talker/db', async (req, res) => {
+    const [dbResult] = await connection.execute('SELECT * FROM TalkerDB.talkers');
+    const refactorResult = dbResult.map((talker) => ({
+      id: talker.id,
+      name: talker.name,
+      age: talker.age,
+      talk: {
+        rate: talker.talk_rate,
+        watchedAt: talker.talk_watched_at,
+      },
+    }));
+    return res.status(statusCode.OK).json(refactorResult);
   });
 
   router.get('/talker/search', tokenValidator,
